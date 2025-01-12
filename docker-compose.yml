@@ -11,6 +11,14 @@ services:
       - ./src:/var/www/html
     depends_on:
       - db
+    command: >
+      /bin/bash -c "
+        cd /var/www/html &&
+        composer install &&
+        apache2-foreground
+      "
+    environment:
+      - COMPOSER_ALLOW_SUPERUSER=1
 
   db:
     image: mysql:5.7
