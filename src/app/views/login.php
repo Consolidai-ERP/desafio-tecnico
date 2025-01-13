@@ -12,7 +12,6 @@
     <script src="../../public/assets/js/bootstrap/bootstrap.min.js" defer></script>
     <script src="../../public/assets/js/jquery-3.7.1.min.js" defer></script>
     <script src="../../public/assets/js/funcoes.js" defer></script>
-
 </head>
 
 <body id="body-login">

@@ -5,16 +5,20 @@ USE teste_consolidai;
 CREATE TABLE IF NOT EXISTS clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    telefone VARCHAR(15) NULL,
+    email VARCHAR(100) NOT NULL,
     endereco TEXT NULL,
+    cep VARCHAR(100) NOT NULL,
+    numero VARCHAR(100) NOT NULL,
+    complemento VARCHAR(100) NOT NULL,
+    tipo_pessoa VARCHAR(100) NOT NULL,
+    cpf_cnpj VARCHAR(100) NOT NULL,
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Inserção de dados iniciais
-INSERT INTO clientes (nome, email, telefone, endereco) VALUES
-('João da Silva', 'joao@gmail.com', '(11) 98765-4321', 'Rua A, 123'),
-('Maria Oliveira', 'maria@gmail.com', '(21) 99876-5432', 'Rua B, 456');
+INSERT INTO clientes (nome, email, endereco, cep, numero, complemento, tipo_pessoa, cpf_cnpj) VALUES
+('Lucas Duarte', 'lucas@gmail.com', 'Rua B - antonio narcisio', '39405121', '123', 'A', 'fisica', '166.732.900-64'),
+('Larissa Duarte', 'larissa@gmail.com', 'Rua B - antonio narcisio', '39405121', '123', 'A', 'fisica', '558.015.920-08');
 
 
 CREATE TABLE IF NOT EXISTS usuarios (

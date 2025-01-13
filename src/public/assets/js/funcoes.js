@@ -36,18 +36,12 @@ function hideLoading() {
 
 function alertMsg(element, success, msg) {
     element.text(msg);
-    console.log("1")
     if (success) {
-        console.log("2")
-
         element.removeClass('alert-danger').addClass('alert-success');
     } else {
-        console.log("4")
-
         element.removeClass('alert-success').addClass('alert-danger');
     }
     element.text(msg).removeClass('d-none').css('display', 'block');
-    console.log(element);
     return;
 }
 
@@ -72,6 +66,8 @@ function login() {
         success: function (response) {
 
             if (response.success) {
+                window.location.href = '/painel/home';
+
                 alertMsg(eAlertMsg, true, response.message);
                 hideLoading();
             } else {
@@ -79,7 +75,6 @@ function login() {
                 hideLoading();
             }
         }, error: function (err) {
-            console.log(err)
             alertMsg(eAlertMsg, false, "Houve um erro inesperado! Por favor tente novamente.");
             hideLoading();
         }

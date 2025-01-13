@@ -13,7 +13,8 @@ class App
     public function __construct()
     {
         $url = $this->parseUrl();
-
+        // pre($url);
+        // die;
         if (!empty($url[0])) {
 
             Middleware::authentication($url[0]);
@@ -23,10 +24,10 @@ class App
                 $this->controller = $url[0] . 'Controller';
                 unset($url[0]);
             } else {
-                //redirecionar 404
-                // Middleware::isLogin();
+                /* Redireciona para o home e caso não tiver logado a middleware redirecina para login */
+                header('Location: /painel/home');
             }
-
+            
             /* É instanciado o objeto do controller solicidado */
             $this->controller = "App\\Controllers\\" . $this->controller;
             $this->controller = new $this->controller;

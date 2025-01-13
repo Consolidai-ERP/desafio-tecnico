@@ -27,15 +27,21 @@ class LoginController extends Controller
             $user = $userModel->getUserByEmail($email);
 
             if ($user) {
+
                 if (password_verify($password, $user['password'])) {
 
                     if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
                         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                     }
-                    $_SESSION['username'] = $user['nome'];
 
-                    $csrfToken = $_SESSION['csrf_token'];
-                    header('Location: /painel/home');
+                    $_SESSION['user'] = $user['nome'];
+
+                    $data = array(
+                        'success' => true,
+                        'message' => 'Credenciais inválidas.'
+                    );
+                    echo json_encode($data);
+                    exit;
                 } else {
                     $data = array(
                         'success' => false,
