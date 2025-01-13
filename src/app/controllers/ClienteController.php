@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Middleware;
 use App\Models\Client;
 
 class ClienteController extends Controller
@@ -39,7 +40,7 @@ class ClienteController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            if (!Middleware::veriry_csrf($_SESSION['csrf_token'], $_POST['csrf_token'])) {
                 $data = array(
                     'success' => false,
                     'message' => "Houve um erro inesperado, por favor tente novamente"
@@ -47,6 +48,7 @@ class ClienteController extends Controller
                 echo json_encode($data);
                 return;
             }
+
 
             $campos = [
                 'nome',
@@ -134,7 +136,7 @@ class ClienteController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            if (!Middleware::veriry_csrf($_SESSION['csrf_token'], $_POST['csrf_token'])) {
                 $data = array(
                     'success' => false,
                     'message' => "Houve um erro inesperado, por favor tente novamente"
@@ -230,7 +232,7 @@ class ClienteController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+            if (!Middleware::veriry_csrf($_SESSION['csrf_token'], $_POST['csrf_token'])) {
                 $data = array(
                     'success' => false,
                     'message' => "Houve um erro inesperado, por favor tente novamente"
