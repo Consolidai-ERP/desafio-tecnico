@@ -1,7 +1,36 @@
 
 $(document).ready(function () {
 
+    var cep = $('#cep').val();
+    if (cep) {
+        cep = cep.replace(/\D/g, '');
+        if (cep.length > 5) {
+            cep = cep.substring(0, 5) + '-' + cep.substring(5, 8);
+        }
+        $('#cep').val(cep);
+    }
+
+    var cpf = $('#cpf').val();
+    if (cpf) {
+        cpf = cpf.replace(/\D/g, '');
+        if (cpf.length > 3) cpf = cpf.substring(0, 3) + '.' + cpf.substring(3);
+        if (cpf.length > 7) cpf = cpf.substring(0, 7) + '.' + cpf.substring(7);
+        if (cpf.length > 11) cpf = cpf.substring(0, 11) + '-' + cpf.substring(11, 14);
+        $('#cpf').val(cpf);
+    }
+
+    var cnpj = $('#cnpj').val();
+    if (cnpj) {
+        cnpj = cnpj.replace(/\D/g, '');
+        if (cnpj.length > 2) cnpj = cnpj.substring(0, 2) + '.' + cnpj.substring(2);
+        if (cnpj.length > 6) cnpj = cnpj.substring(0, 6) + '.' + cnpj.substring(6);
+        if (cnpj.length > 10) cnpj = cnpj.substring(0, 10) + '/' + cnpj.substring(10);
+        if (cnpj.length > 15) cnpj = cnpj.substring(0, 15) + '-' + cnpj.substring(15, 17);
+        $('#cnpj').val(cnpj);
+    }
+
     $('#tipoPessoa').change(function () {
+
         const tipoPessoa = $(this).val();
         const cpf_content = $('#cpf-content');
         const cnpj_content = $('#cnpj-content');
@@ -9,17 +38,19 @@ $(document).ready(function () {
         const inputCnpj = $('#cnpj');
 
         if (tipoPessoa === 'fisica') {
-            cpf_content.show();
-            cnpj_content.hide();
+            cnpj_content.removeClass('d-block').addClass('d-none');
+            cpf_content.removeClass('d-none').addClass('d-block');
             inputCpf.prop('disabled', false);
             inputCnpj.prop('disabled', true);
         } else if (tipoPessoa === 'juridica') {
-            cpf_content.hide();
-            cnpj_content.show();
+            cpf_content.removeClass('d-block').addClass('d-none');
+            cnpj_content.removeClass('d-none').addClass('d-block');
             inputCpf.prop('disabled', true);
             inputCnpj.prop('disabled', false);
         }
+
     });
+
     $('#tipoPessoa').trigger('change');
 
     $('#nome').on('input', function () {
@@ -89,9 +120,17 @@ $(document).ready(function () {
             cadastroCliente();
         });
     }
+
+    const formEditaCliente = $('#formEditaCliente');
+    if (formEditaCliente.length) {
+        formEditaCliente.on('submit', function (event) {
+            event.preventDefault();
+            editaCliente();
+        });
+    }
 });
 
-// Valida CPF
+/* Valida CPF */
 function validarCPF(cpf) {
     cpf = cpf.replace(/\D/g, '');
 
@@ -189,6 +228,22 @@ function cadastroCliente() {
 
     const infoReturn = $('#alert-return');
 
+    if (tipoPessoa === 'fisica') {
+        if (!validarCPF(cpfcnpj)) {
+            $('#alertCnpj').removeClass('d-block').addClass('d-none');
+            $('#alertCpf').removeClass('d-none').addClass('d-block');
+            return;
+        }
+    } else {
+        if (tipoPessoa === 'juridica') {
+            if (!validarCNPJ(cpfcnpj)) {
+                $('#alertCpf').removeClass('d-block').addClass('d-none');
+                $('#alertCnpj').removeClass('d-none').addClass('d-block');
+                return;
+            }
+        }
+    }
+
     showLoading();
     $.ajax({
         url: '/painel/cliente/insert',
@@ -220,4 +275,112 @@ function cadastroCliente() {
             hideLoading();
         }
     });
+}
+
+
+function editaCliente() {
+
+    const csrf_token = $('#csrf_token').val();
+
+    let id = $('#id_cliente').val();
+    let nome = $('#nome').val();
+    let email = $('#email').val();
+    let endereco = $('#endereco').val();
+    let numero = $('#numero').val();
+    let complemento = $('#complemento').val();
+    let cep = $('#cep').val();
+
+    const tipoPessoa = $('#tipoPessoa').val();
+
+    if (tipoPessoa === 'fisica') {
+        var cpfcnpj = $('#cpf').val();
+    } else if (tipoPessoa === 'juridica') {
+        var cpfcnpj = $('#cnpj').val();
+    }
+
+    const infoReturn = $('#alert-return');
+
+    if (tipoPessoa === 'fisica') {
+        if (!validarCPF(cpfcnpj)) {
+            $('#alertCnpj').removeClass('d-block').addClass('d-none');
+            $('#alertCpf').removeClass('d-none').addClass('d-block');
+            return;
+        }
+    } else {
+        if (tipoPessoa === 'juridica') {
+            if (!validarCNPJ(cpfcnpj)) {
+                $('#alertCpf').removeClass('d-block').addClass('d-none');
+                $('#alertCnpj').removeClass('d-none').addClass('d-block');
+                return;
+            }
+        }
+    }
+
+    showLoading();
+    $.ajax({
+        url: '/painel/cliente/update',
+        type: 'POST',
+        async: true,
+        method: 'POST',
+        dataType: 'json',
+        data: {
+            csrf_token: csrf_token,
+            id: id,
+            nome: nome,
+            email: email,
+            endereco: endereco,
+            cep: cep,
+            numero: numero,
+            complemento: complemento,
+            tipo_pessoa: tipoPessoa,
+            cpf_cnpj: cpfcnpj,
+        },
+        success: function (response) {
+            if (response.success) {
+                alertMsg(infoReturn, true, response.message);
+                hideLoading();
+            } else {
+                alertMsg(infoReturn, false, response.message);
+                hideLoading();
+            }
+        }, error: function () {
+            alertMsg(infoReturn, false, "Houve um erro inesperado! Por favor tente novamente.");
+            hideLoading();
+        }
+    });
+}
+
+function excluir(event, id) {
+    const infoReturn = $('#alert-return');
+
+    event.preventDefault();
+    if (confirm("Tem certeza que deseja excluir esse cliente?")) {
+        const csrf_token = $('#csrf_token').val();
+
+        showLoading();
+        $.ajax({
+            url: '/painel/cliente/delete',
+            type: 'POST',
+            async: true,
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                csrf_token: csrf_token,
+                id: id,
+            },
+            success: function (response) {
+                if (response.success) {
+                    alertMsg(infoReturn, true, response.message);
+                    hideLoading();
+                    window.location.href = "/painel/home";
+                } else {
+                    alertMsg(infoReturn, false, response.message);
+                    hideLoading();
+                }
+            }, error: function () {
+                alertMsg(infoReturn, false, "Houve um erro inesperado! Por favor tente novamente.");
+                hideLoading();
+            }
+        });
+    }
 }

@@ -1,11 +1,12 @@
 <h2>Clientes</h2>
-<p id="info-return-funcionarios"></p>
+<p id="info-return-clientes"></p>
 
 <div class="block-btn">
     <a href="/painel/cliente/cadastro" class="btn btn-success btn-sm">
         <i class="fas fa-plus"></i> Cadastrar
-    </a>        
-
+    </a>
+</div>
+<div id="alert-return" class="alert alert-danger mt-2 d-none" role="alert">
 </div>
 <table class="table table-striped table-hover">
     <thead class="thead-dark">
@@ -31,12 +32,13 @@
                     <td class="d-none d-lg-table-cell"><?php echo htmlspecialchars($cliente['endereco']); ?></td>
                     <td class="d-none d-xl-table-cell"><?php echo htmlspecialchars($cliente['data_cadastro']); ?></td>
                     <td>
-                        <a href="/controle_clientes/public/clientes/editar/<?php echo $cliente['id']; ?>" class="btn btn-warning btn-sm">
+                        <a href="/painel/cliente/edita/<?php echo $cliente['id']; ?>" class="btn btn-warning btn-sm">
                             Editar
                         </a>
                     </td>
                     <td>
                         <form style="display:inline-block;">
+                            <input type="hidden" id="csrf_token" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                             <button type="submit" class="btn btn-danger btn-sm" onclick="excluir(event, '<?php echo $cliente['id'] ?>')">
                                 <i class="fas fa-trash"></i>
                             </button>

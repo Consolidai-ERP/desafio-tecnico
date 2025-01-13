@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Core\Database;
+use PDO;
 
 class Client
 {
@@ -22,7 +23,17 @@ class Client
         $stmt->execute([]);
         return $stmt->fetchAll();
     }
-    
+
+    /**
+     * Metódo responsável por buscar um cliente pelo Id
+     */
+    public function getById($id)
+    {
+        $stmt = $this->db->prepare("SELECT * FROM clientes WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    }
+
     /**
      * Metódo responsável por buscar um cliente pelo email
      */
@@ -50,7 +61,7 @@ class Client
     {
         $nome = $data['nome'];
         $email = $data['email'];
-        $endereco = $data['endereco'];  
+        $endereco = $data['endereco'];
         $cep = $data['cep'];
         $numero = $data['numero'];
         $complemento = $data['complemento'];
@@ -74,6 +85,61 @@ class Client
 
         if ($stmt->execute()) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Metódo responsável por atualizar um cliente
+     */
+    public function update($id, $data)
+    {
+        if (!$id) {
+            return false;
+        }
+    
+        $fields = [];
+    
+        foreach ($data as $key => $value) {
+            if (!empty($value)) {
+                $fields[] = "$key = :$key";
+            }
+        }
+    
+        if (empty($fields)) {
+            return false;
+        }
+    
+        $sql = "UPDATE clientes SET " . implode(', ', $fields) . " WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+    
+        foreach ($data as $key => $value) {
+            if (!empty($value)) {
+                $stmt->bindValue(":$key", $value);
+            }
+        }
+    
+        $stmt->bindValue(':id', $id);
+    
+        if ($stmt->execute()) {
+            return $stmt->rowCount() > 0; 
+        }
+    
+        return false; 
+    }
+    
+    /**
+     * Metódo responsável por excluir um cliente
+     */
+    public function delete($id)
+    {
+        $sql = "DELETE FROM clientes WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return $stmt->rowCount() > 0;
         }
 
         return false;

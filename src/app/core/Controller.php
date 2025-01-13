@@ -3,7 +3,7 @@
 namespace App\Core;
 
 class Controller
-{   
+{
     /**
      * Metódo responsável por renderizar a view
      * @param string

@@ -29,7 +29,7 @@ class LoginController extends Controller
             if ($user) {
 
                 if (password_verify($password, $user['password'])) {
-
+                    
                     if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
                         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
                     }
@@ -59,5 +59,12 @@ class LoginController extends Controller
                 exit;
             }
         }
+    }
+
+
+    public function logout()
+    {
+        session_destroy();
+        header('Location: /painel/login');
     }
 }

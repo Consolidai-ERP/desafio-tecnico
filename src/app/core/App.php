@@ -13,8 +13,7 @@ class App
     public function __construct()
     {
         $url = $this->parseUrl();
-        // pre($url);
-        // die;
+
         if (!empty($url[0])) {
 
             Middleware::authentication($url[0]);
