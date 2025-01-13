@@ -1,29 +1,33 @@
-# Usando a imagem base do PHP com Apache
+# Usar a imagem oficial do PHP com Apache
 FROM php:8.2-apache
 
-# Instalar extensões necessárias para o PHP (pdo e pdo_mysql)
-RUN docker-php-ext-install pdo pdo_mysql
+# Instalar extensões necessárias para o PHP e utilitários para debugging
+RUN apt-get update && apt-get install -y nano curl \
+    && docker-php-ext-install pdo pdo_mysql \
+    && a2enmod rewrite
 
-# Instalar o Composer (se não estiver copiando de outra imagem)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Instalar o Composer e validar a instalação
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet \
+    && composer --version
 
-# Copiar os arquivos do projeto para o diretório de trabalho dentro do container
+# Configurar permissões do diretório do Apache e arquivos do projeto
 COPY ./src /var/www/html/
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
-# Garantir as permissões corretas dos arquivos copiados
-RUN chown -R www-data:www-data /var/www/html
-
-# Alterar o arquivo de configuração do Apache para apontar para o diretório 'public' como raiz
-RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
-
-# Ativar o módulo de reescrita do Apache
-RUN a2enmod rewrite
+# Configurar o Apache para permitir .htaccess
+RUN echo '<Directory /var/www/html>' > /etc/apache2/conf-available/override.conf \
+    && echo '    AllowOverride All' >> /etc/apache2/conf-available/override.conf \
+    && echo '    Require all granted' >> /etc/apache2/conf-available/override.conf \
+    && echo '</Directory>' >> /etc/apache2/conf-available/override.conf \
+    && a2enconf override \
+    && apachectl configtest
 
 # Definir o diretório de trabalho como /var/www/html
 WORKDIR /var/www/html
 
-# Expôr a porta 80 para acesso
+# Expôr a porta 80 para acesso externo
 EXPOSE 80
 
-# Iniciar o Apache no modo foreground para o container rodar corretamente
+# Iniciar o Apache no modo foreground
 CMD ["apache2-foreground"]

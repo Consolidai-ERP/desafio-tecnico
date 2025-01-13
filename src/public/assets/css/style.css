@@ -1,0 +1,21 @@
+#body-login {
+    background: linear-gradient(to right, #ffffff 50%, #913635 50%);
+}
+
+#content-login {
+    background-color: white;
+}
+
+#show-password {
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+
+@media (max-width: 1024px) {
+    #content-login {
+        flex-direction: column;
+    }
+}
