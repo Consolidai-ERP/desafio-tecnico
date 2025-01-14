@@ -22,21 +22,21 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-12 col-md-2">
+                        <div class="col-12 col-md-4 col-lg-2">
                             <label for="cep" class="form-label">CEP</label>
                             <input type="text" class="form-control" id="cep" name="cep" pattern="\d{5}-\d{3}" maxlength="9" required>
                         </div>
-                        <div class="col-12 col-md-6">
+                        <div class="col-12 col-md-6 col-lg-6">
                             <label for="endereco" class="form-label">Endereço</label>
                             <input type="text" class="form-control" id="endereco" name="endereco" required>
                         </div>
-                        <div class="col-12 col-md-2">
+                        <div class="col-12 col-md-2 col-lg-2">
                             <label for="numero" class="form-label">Número</label>
                             <input type="text" class="form-control" id="numero" name="numero" required>
                         </div>
-                        <div class="col-12 col-md-2">
+                        <div class="col-12 col-md-2 col-lg-2">
                             <label for="complemento" class="form-label">Complemento</label>
-                            <input type="text" class="form-control" id="complemento" name="complemento" required>
+                            <input type="text" class="form-control" id="complemento" name="complemento">
                         </div>
                     </div>
 

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS clientes (
     endereco TEXT NULL,
     cep VARCHAR(100) NOT NULL,
     numero VARCHAR(100) NOT NULL,
-    complemento VARCHAR(100) NOT NULL,
+    complemento VARCHAR(100) NULL,
     tipo_pessoa VARCHAR(100) NOT NULL,
     cpf_cnpj VARCHAR(100) NOT NULL,
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP

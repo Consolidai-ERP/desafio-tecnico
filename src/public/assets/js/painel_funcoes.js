@@ -265,6 +265,16 @@ function cadastroCliente() {
         success: function (response) {
             if (response.success) {
                 alertMsg(infoReturn, true, response.message);
+
+                $('#nome').val('');
+                $('#email').val('');
+                $('#endereco').val('');
+                $('#numero').val('');
+                $('#complemento').val('');
+                $('#cep').val('');
+                $('#cpf').val('');
+                $('#cnpj').val('');
+
                 hideLoading();
             } else {
                 alertMsg(infoReturn, false, response.message);

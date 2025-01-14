@@ -29,7 +29,7 @@
                     <td><?php echo htmlspecialchars($cliente['nome']); ?></td>
                     <td class="d-none d-sm-table-cell"><?php echo htmlspecialchars($cliente['email']); ?></td>
                     <td class="d-none d-md-table-cell"><?php echo htmlspecialchars($cliente['tipo_pessoa']); ?></td>
-                    <td class="d-none d-lg-table-cell"><?php echo htmlspecialchars($cliente['endereco']); ?></td>
+                    <td class="d-none d-lg-table-cell"><?php echo htmlspecialchars($cliente['endereco'] . ', ' . $cliente['numero'].$cliente['complemento']); ?></td>
                     <td class="d-none d-xl-table-cell"><?php echo htmlspecialchars($cliente['data_cadastro']); ?></td>
                     <td>
                         <a href="/painel/cliente/edita/<?php echo $cliente['id']; ?>" class="btn btn-warning btn-sm">

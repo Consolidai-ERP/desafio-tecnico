@@ -38,7 +38,7 @@ class LoginController extends Controller
 
                     $data = array(
                         'success' => true,
-                        'message' => 'Credenciais inválidas.'
+                        'message' => 'Login'
                     );
                     echo json_encode($data);
                     exit;
