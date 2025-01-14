@@ -17,7 +17,12 @@ class Middleware
         }
     }
 
-
+    /**
+     * Metódo responsável por verificar o csrf
+     * @param string
+     * @param string
+     * @return bool
+     */
     public static function veriry_csrf($csrf_session, $csrf_post)
     {
         if (!hash_equals($csrf_session, $csrf_post)) {
