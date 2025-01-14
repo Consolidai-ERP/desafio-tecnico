@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Se o acesso for feito à raiz do projeto, redireciona para painel/
+RewriteRule ^$ painel/ [L]
+
+# Não redirecionar se for um arquivo ou diretório existente
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Redirecionar todas as outras requisições para painel/index.php
+RewriteRule ^(.*)$ painel/index.php [L]
